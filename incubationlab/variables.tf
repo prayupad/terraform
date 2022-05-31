@@ -55,7 +55,7 @@ variable "subnet_name" {
 
 variable "aks_clustername" {
   description = "Name of the AKS cluster."
-  default     = "akspoc"
+  default     = "epamakscluster"
 }
 
 
