@@ -40,7 +40,7 @@ variable "vm_subnet_name" {
 
 variable "address_space" {
   description = "VNET address space"
-  default     = "[10.0.0.0/16]"
+  default     = "10.0.0.0/16"
 }
 
 #variable "private_endpoint_address_space" {
@@ -81,17 +81,17 @@ variable "nodepool_vm_size" {
 
 variable "network_docker_bridge_cidr" {
   description = "CNI Docker bridge cidr"
-  default     = "172.17.0.1/16"
+  default     = "172.10.0.0/24"
 }
 
 variable "network_dns_service_ip" {
   description = "CNI DNS service IP"
-  default     = "172.16.0.10"
+  default     = "10.0.0.10"
 }
 
 variable "network_service_cidr" {
   description = "CNI service cidr"
-  default     = "172.16.0.0/22"
+  default     = "10.0.0.0/24"
 }
 
 #variable "server_name" {
@@ -111,35 +111,35 @@ variable "sku_name" {
 variable "storage_account_name" {
   description = "Name of the storage account and bucket"
   type        = string
-  default     = "storagepoc"
+  default     = "epamstorage"
 }
 
 variable "sa_container_name" {
   description = "Name of the storage account and bucket"
   type        = string
-  default     = "poc"
+  default     = "epamcontainer"
 }
 
 variable "tf_admin_users" {
   description = "Name of the users and groups which need acces on KeyVault"
   type        = set(string)
-  default     = ["aksusermsi","SPN"]
+  default     = ["epamaksusermsi","SPN"]
 }
 
 variable "aks_user_assigned_identity" {
   description = "Name of the users and groups which need acces on KeyVault"
   type        = string
-  default     = "aksusermsi"
+  default     = "epamaksusermsi"
 }
 
 variable "keyvault_name" {
   description = "Name of the Key Vault to ceate key to encrypt/decrypt"
   type        = string
-  default     = "aksvaultpoc"
+  default     = "epamaksvault"
 }
 
 variable "acr_name" {
   description = "Name of the Azure Container Registry"
   type        = string
-  default     = "acrprayashi"
+  default     = "epamacr"
 }
