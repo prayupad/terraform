@@ -40,7 +40,7 @@ variable "vm_subnet_name" {
 
 variable "address_space" {
   description = "VNET address space"
-  default     = "[172.16.0.0/12]"
+  default     = "[172.0.0.0/16]"
 }
 
 #variable "private_endpoint_address_space" {
@@ -50,7 +50,7 @@ variable "address_space" {
 
 variable "aks_subnet_address_space" {
   description = "AKS subnet address space"
-  default     = "[172.18.0.0/16]"
+  default     = "[10.0.1.0/24]"
 }
 
 variable "bastion_subnet_address_space" {
