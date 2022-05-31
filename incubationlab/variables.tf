@@ -141,5 +141,5 @@ variable "keyvault_name" {
 variable "acr_name" {
   description = "Name of the Azure Container Registry"
   type        = string
-  default     = "acrpoc"
+  default     = "acrprayashi"
 }
