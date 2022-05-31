@@ -19,12 +19,12 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
-resource "azurerm_user_assigned_identity" "aksusermsi" {
-  name                = var.aks_user_assigned_identity
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  depends_on          = [azurerm_resource_group.rg]
-}
+#resource "azurerm_user_assigned_identity" "aksusermsi" {
+ # name                = var.aks_user_assigned_identity
+  #resource_group_name = var.resource_group_name
+  #location            = var.location
+  #depends_on          = [azurerm_resource_group.rg]
+#}
 
 # Random Generator
 resource "random_id" "log_analytics_workspace_name_suffix" {
