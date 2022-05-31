@@ -47,7 +47,7 @@ resource "azurerm_log_analytics_workspace" "akslogworkspace" {
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "Standalone"
-  retention_in_days   = 7
+  retention_in_days   = 30
   depends_on          = [azurerm_resource_group.rg]
 }
 
