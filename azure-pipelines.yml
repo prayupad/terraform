@@ -31,7 +31,6 @@ stages:
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
           ensureBackend: true
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmResourceGroupLocation: '$(tflocation)'
           backendAzureRmStorageAccountName: '$(tfStorageAccount)'
           backendAzureRmStorageAccountSku: 'Standard_LRS'
           backendAzureRmContainerName: '$(tfcontainer)'
@@ -69,7 +68,6 @@ stages:
             backendAzureRmContainerName: '$(tfcontainer)'
             backendAzureRmKey: '$(tfkey)'
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-            allowTelemetryCollection: true
         - task: TerraformCLI@0
           displayName: plan
           inputs:
