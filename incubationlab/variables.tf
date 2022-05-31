@@ -40,7 +40,7 @@ variable "vm_subnet_name" {
 
 variable "address_space" {
   description = "VNET address space"
-  default     = "[172.0.0.0/16]"
+  default     = "[10.0.0.0/16]"
 }
 
 #variable "private_endpoint_address_space" {
