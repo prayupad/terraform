@@ -33,35 +33,25 @@ variable "subnet_name" {
   #default     = "private-endpoint-subnet"
 #}
 
-variable "vm_subnet_name" {
-  description = "Jump VM Subnet name"
-  default     = "jump-vm-subnet"
-}
 
-variable "address_space" {
-  description = "VNET address space"
-  default     = "10.0.0.0/16"
-}
 
-#variable "private_endpoint_address_space" {
- # description = "Private endpoint subnet address space"
-  #default     = "[172.16.4.0/24]"
+#variable "address_space" {
+ # description = "VNET address space"
+  #default     = "10.0.0.0/16"
 #}
 
-variable "aks_subnet_address_space" {
-  description = "AKS subnet address space"
-  default     = "[10.0.1.0/24]"
-}
 
-variable "bastion_subnet_address_space" {
-  description = "Bastion subnet address space"
-  default     = "172.16.5.0/24"
-}
 
-variable "vm_subnet_address_space" {
-  description = "Jump vm subnet address space"
-  default     = "172.16.6.0/24"
-}
+#variable "aks_subnet_address_space" {
+ # description = "AKS subnet address space"
+  #default     = "[10.0.1.0/24]"
+#}
+
+
+#variable "vm_subnet_address_space" {
+ # description = "Jump vm subnet address space"
+  #default     = "172.16.6.0/24"
+#}
 
 variable "aks_clustername" {
   description = "Name of the AKS cluster."

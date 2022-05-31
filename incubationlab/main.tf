@@ -82,14 +82,13 @@ module "aksnetwork" {
   resource_group_name = var.resource_group_name
   location            = var.location
   vnet_name           = var.vnet_name
-  address_space       = [var.address_space]
+  address_space       = ["10.0.0.0/16"]
   depends_on          = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                    = var.aks_clustername
   location                = var.location
-  #node_resource_group     = "MC_${var.resource_group_name}"
   resource_group_name     = var.resource_group_name
   dns_prefix              = var.aks_clustername
   depends_on              = [azurerm_resource_group.rg]
