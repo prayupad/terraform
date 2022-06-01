@@ -1,13 +1,8 @@
-# output "ssh_command" {
-#   value = "ssh ${module.jumpbox.jumpbox_username}@${module.jumpbox.jumpbox_ip}"
-#   sensitive = true
-# }
-
-output "kube_config" {
+/* output "kube_config" {
     value = "${azurerm_kubernetes_cluster.aks.kube_config_raw}"
     sensitive = true
+} */
+
+output "subnetout_id" {
+    value = azurerm_log_analytics_workspace.akslogworkspace.id
 }
-# output "jumpbox_password" {
-#   description = "Jumpbox Admin Passowrd"
-#   value       = module.jumpbox.jumpbox_password
-# }

@@ -16,6 +16,7 @@ variable "nsg_name" {
 variable "vnet_name" {
   description = "VNET name"
   type        = string
+
 }
 
 variable "vnet_address_range" {
@@ -27,6 +28,7 @@ variable "vnet_address_range" {
 variable "subnet_name" {
   description = "subnet name"
   type        = string
+  default = "pulabsubnet1"
 
 }
 variable "subnet_address_range" {
