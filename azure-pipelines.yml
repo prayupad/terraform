@@ -9,7 +9,7 @@ variables:
   - name: tfresourceGroup
     value: 'terraformRG'
   - name: tfstorageAccount
-    value: 'tfstorage'
+    value: 'putfstorage'
   - name: tfcontainer
     value: 'tfstate'
   - name: tfkey
