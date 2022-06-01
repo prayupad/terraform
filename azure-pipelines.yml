@@ -3,7 +3,17 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-name: Terraform-IAC$(BuildDefinitionName)
+name: Terraform-Build_$(BuildDefinitionName)
+
+variables:
+  - name: tfresourceGroup
+    value: 'terraformRG'
+  - name: tfstorageAccount
+    value: 'tfstorage'
+  - name: tfcontainer
+    value: 'tfstate'
+  - name: tfkey
+    value: 'labphaseOne.tfstate'
 
 trigger:
 - none
@@ -21,21 +31,23 @@ stages:
         displayName: 'install v1.2.0'
         inputs:
           terraformVersion: 'v1.2.0'
+
       - task: TerraformCLI@0
-        displayName: 'init backened'
         inputs:
-          command: init
-          commandOptions: -reconfigure
+          command: 'init'
+          commandOptions: 'input=false'
           backendType: 'azurerm'
           backendServiceArm: 'incubation-lab'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
           ensureBackend: true
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+          backendAzureRmResourceGroupLocation: 'eastus2'
+          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
           backendAzureRmStorageAccountSku: 'Standard_LRS'
           backendAzureRmContainerName: '$(tfcontainer)'
           backendAzureRmKey: '$(tfkey)'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+        
       - task: TerraformCLI@0
         displayName: validate
         inputs:
@@ -56,18 +68,21 @@ stages:
             terraformVersion: '1.2.0'
         
         - task: TerraformCLI@0
-          displayName: 'init backend'
-          inputs:
-            command: 'init'
-            commandOptions: '-input=false'
-            backendType: 'azurerm'
-            backendServiceArm: 'incubation-lab'
-            backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
-            backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-            backendAzureRmStorageAccountName: '$(tfStorageAccount)'
-            backendAzureRmContainerName: '$(tfcontainer)'
-            backendAzureRmKey: '$(tfkey)'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+        inputs:
+          command: 'init'
+          commandOptions: 'input=false'
+          backendType: 'azurerm'
+          backendServiceArm: 'incubation-lab'
+          backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+          ensureBackend: true
+          backendAzureRmResourceGroupName: '$(tfresourceGroup)'
+          backendAzureRmResourceGroupLocation: 'eastus2'
+          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
+          backendAzureRmStorageAccountSku: 'Standard_LRS'
+          backendAzureRmContainerName: '$(tfcontainer)'
+          backendAzureRmKey: '$(tfkey)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+        
         - task: TerraformCLI@0
           displayName: plan
           inputs:
@@ -89,19 +104,20 @@ stages:
           terraformVersion: 'v1.2.0'
       
       - task: TerraformCLI@0
-        displayName: 'init backend'
         inputs:
-          command: init
-          commandOptions: -reconfigure -input=false
+          command: 'init'
+          commandOptions: 'input=false'
           backendType: 'azurerm'
           backendServiceArm: 'incubation-lab'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+          ensureBackend: true
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+          backendAzureRmResourceGroupLocation: 'eastus2'
+          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
+          backendAzureRmStorageAccountSku: 'Standard_LRS'
           backendAzureRmContainerName: '$(tfcontainer)'
           backendAzureRmKey: '$(tfkey)'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          allowTelemetryCollection: true
 
       - task: TerraformCLI@0
         displayName: 'terraform plan'
