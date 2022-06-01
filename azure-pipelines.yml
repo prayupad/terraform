@@ -38,7 +38,7 @@ stages:
           command: 'init'
           commandOptions: -reconfigure
           backendType: 'azurerm'
-          backendServiceArm: 'incubation-lab'
+          backendServiceArm: 'terraform'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
           ensureBackend: true
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
@@ -71,9 +71,9 @@ stages:
         - task: TerraformCLI@0
           inputs:
             command: 'init'
-            commandOptions: 'input=false'
+            commandOptions: -reconfigure
             backendType: 'azurerm'
-            backendServiceArm: 'incubation-lab'
+            backendServiceArm: 'terraform'
             backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
             ensureBackend: true
             backendAzureRmResourceGroupName: '$(tfresourceGroup)'
@@ -107,9 +107,9 @@ stages:
       - task: TerraformCLI@0
         inputs:
           command: 'init'
-          commandOptions: 'input=false'
+          commandOptions: -reconfigure
           backendType: 'azurerm'
-          backendServiceArm: 'incubation-lab'
+          backendServiceArm: 'terraform'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
           ensureBackend: true
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
@@ -125,7 +125,7 @@ stages:
         inputs:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'incubation-lab'
+          environmentServiceName: 'terraform'
           commandOptions: '-input=false'
           allowTelemetryCollection: true
           publishPlanResults: 'tfplan'
@@ -135,6 +135,6 @@ stages:
         inputs:
           command: 'apply'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'incubation-lab'
+          environmentServiceName: 'terraform'
           commandOptions: '-input=false -auto-approve' 
           allowTelemetryCollection: true
