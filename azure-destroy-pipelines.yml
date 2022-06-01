@@ -6,6 +6,16 @@
 trigger:
 - none
 
+variables:
+  - name: tfresourceGroup
+    value: 'cloud-shell-storage-centralindia'
+  - name: tfstorageAccount
+    value: 'csg10032001fa0cd07c'
+  - name: tfcontainer
+    value: 'tfstate'
+  - name: tfkey
+    value: 'labphaseOne.tfstate' 
+
 pool:
   vmImage: ubuntu-latest
 
@@ -29,7 +39,7 @@ stages :
             backendServiceArm: 'incubation-lab'
             backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
             backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-            backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+            backendAzureRmStorageAccountName: '$(tfstorageAccount)'
             backendAzureRmContainerName: '$(tfcontainer)'
             backendAzureRmKey: '$(tfkey)'
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
