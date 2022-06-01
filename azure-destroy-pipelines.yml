@@ -9,13 +9,13 @@ trigger:
 
 variables:
   - name: tfresourceGroup
-    value: 'cloud-shell-storage-centralindia'
+    value: 'terraformRG'
   - name: tfstorageAccount
-    value: 'csg10032001fa0cd07c'
+    value: 'putfstorage'
   - name: tfcontainer
     value: 'tfstate'
   - name: tfkey
-    value: 'labphaseOne.tfstate' 
+    value: 'labphaseOne.tfstate'
 
 pool:
   vmImage: ubuntu-latest
@@ -37,7 +37,7 @@ stages :
             command: 'init'
             commandOptions: '-input=false'
             backendType: 'azurerm'
-            backendServiceArm: 'incubation-lab'
+            backendServiceArm: 'terraform'
             backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
             backendAzureRmResourceGroupName: '$(tfresourceGroup)'
             backendAzureRmStorageAccountName: '$(tfstorageAccount)'
@@ -46,6 +46,7 @@ stages :
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
 
         - task: TerraformCLI@0
+          displayName: validate
           inputs:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
@@ -69,7 +70,7 @@ stages :
             command: 'init'
             commandOptions: '-input=false'
             backendType: 'azurerm'
-            backendServiceArm: 'incubation-lab'
+            backendServiceArm: 'terraform'
             backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
             backendAzureRmResourceGroupName: '$(tfresourceGroup)'
             backendAzureRmStorageAccountName: '$(tfStorageAccount)'
@@ -88,7 +89,7 @@ stages :
         inputs:
           command: 'destroy'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'incubation-lab'
+          environmentServiceName: 'terraform'
           commandOptions: '-input=false'
           allowTelemetryCollection: false        
 
