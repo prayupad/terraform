@@ -28,14 +28,15 @@ stages:
       continueOnError: false
       steps:
       - task: TerraformInstaller@0
-        displayName: 'install v1.2.0'
+        displayName: 'install'
         inputs:
           terraformVersion: 'v1.2.0'
 
       - task: TerraformCLI@0
+        displayName: 'init'
         inputs:
           command: 'init'
-          commandOptions: 'input=false'
+          commandOptions: -reconfigure
           backendType: 'azurerm'
           backendServiceArm: 'incubation-lab'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
