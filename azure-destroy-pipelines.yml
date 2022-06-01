@@ -1,0 +1,83 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages :
+  - stage: validate
+    jobs:
+    - job: validate
+      continueOnError: false
+
+      steps:
+        - task: TerraformInstaller@0
+          displayName: install
+          inputs:
+            terraformVersion: 'v1.2.0'
+        - task: TerraformCLI@0
+          displayName: init
+          inputs:
+            command: 'init'
+            commandOptions: '-input=false'
+            backendType: 'azurerm'
+            backendServiceArm: 'incubation-lab'
+            backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+            backendAzureRmResourceGroupName: '$(tfresourceGroup)'
+            backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+            backendAzureRmContainerName: '$(tfcontainer)'
+            backendAzureRmKey: '$(tfkey)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+
+        - task: TerraformCLI@0
+          inputs:
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+            allowTelemetryCollection: false
+
+  - stage: destroy
+    dependsOn: [validate]
+    condition: succeeded('validate')
+    jobs:
+    - job: terraform_destroy
+      steps:
+      - checkout: self
+      - task: TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: 'v1.2.0'
+              
+      - task: TerraformCLI@0
+        displayName: 'init'
+        inputs:
+            command: 'init'
+            commandOptions: '-input=false'
+            backendType: 'azurerm'
+            backendServiceArm: 'incubation-lab'
+            backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+            backendAzureRmResourceGroupName: '$(tfresourceGroup)'
+            backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+            backendAzureRmContainerName: '$(tfcontainer)'
+            backendAzureRmKey: '$(tfkey)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+
+      - task: TerraformCLI@0
+        displayName: 'validate'
+        inputs:
+          command: 'validate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'        
+                
+      - task: TerraformCLI@0
+        displayName: 'destroy'
+        inputs:
+          command: 'destroy'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+          environmentServiceName: 'incubation-lab'
+          commandOptions: '-input=false'
+          allowTelemetryCollection: false        
+
