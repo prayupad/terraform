@@ -23,16 +23,25 @@ resource "azurerm_resource_group" "rg" {
   tags = { environment = "dev" }
 }
 
-#resource "azurerm_user_assigned_identity" "aksusermsi" {
- # name                = var.aks_user_assigned_identity
-  #resource_group_name = var.resource_group_name
-  #location            = var.location
-  #depends_on          = [azurerm_resource_group.rg]
-#}
+/*
+resource "azurerm_user_assigned_identity" "aksusermsi" {
+  name                = var.aks_user_assigned_identity
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  depends_on          = [azurerm_resource_group.rg]
+} */
 
 # Random Generator
 resource "random_id" "log_analytics_workspace_name_suffix" {
     byte_length = 8
+}
+
+module "aksnetwork" {
+  source              = "./modules/vnet"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  vnet_name           = "plabvnet"
+  #depends_on          = [azurerm_resource_group.rg]
 }
 
 # Azure Container Registry
@@ -40,9 +49,11 @@ module "acr" {
   source = "./modules/acr"
   resource_group_name = var.resource_group_name
   location = var.location
-  acr_name = "plabacr"
+  acr_name = "labacr"
   
 }
+
+
 
 # Log Analytics
 resource "azurerm_log_analytics_workspace" "akslogworkspace" {
@@ -80,14 +91,7 @@ resource "azurerm_log_analytics_solution" "akslogsolution" {
   #  environment = "POC"
  # }
 #}
-module "aksnetwork" {
-  source              = "./modules/vnet"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  vnet_name           = var.vnet_name
-  address_space       = ["10.0.0.0/16"]
-  depends_on          = [azurerm_resource_group.rg]
-}
+
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                    = var.aks_clustername

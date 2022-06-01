@@ -18,13 +18,20 @@ variable "vnet_name" {
   type        = string
 }
 
+variable "vnet_address_range" {
+  description = "VNET address space"
+  type        = list(string)
+  default = [ "10.0.0.0/8" ]
+}
+
 variable "subnet_name" {
   description = "subnet name"
   type        = string
 
 }
-variable "address_space" {
+variable "subnet_address_range" {
   description = "VNET address space"
   type        = list(string)
+  default = [ "10.240.0.0/16" ]
 }
 
