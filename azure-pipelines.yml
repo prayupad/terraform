@@ -68,20 +68,20 @@ stages:
             terraformVersion: '1.2.0'
         
         - task: TerraformCLI@0
-        inputs:
-          command: 'init'
-          commandOptions: 'input=false'
-          backendType: 'azurerm'
-          backendServiceArm: 'incubation-lab'
-          backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
-          ensureBackend: true
-          backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmResourceGroupLocation: 'eastus2'
-          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
-          backendAzureRmStorageAccountSku: 'Standard_LRS'
-          backendAzureRmContainerName: '$(tfcontainer)'
-          backendAzureRmKey: '$(tfkey)'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+          inputs:
+            command: 'init'
+            commandOptions: 'input=false'
+            backendType: 'azurerm'
+            backendServiceArm: 'incubation-lab'
+            backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+            ensureBackend: true
+            backendAzureRmResourceGroupName: '$(tfresourceGroup)'
+            backendAzureRmResourceGroupLocation: 'eastus2'
+            backendAzureRmStorageAccountName: '$(tfstorageAccount)'
+            backendAzureRmStorageAccountSku: 'Standard_LRS'
+            backendAzureRmContainerName: '$(tfcontainer)'
+            backendAzureRmKey: '$(tfkey)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
         
         - task: TerraformCLI@0
           displayName: plan
