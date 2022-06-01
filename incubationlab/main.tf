@@ -14,9 +14,13 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+
+#Create Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
+  tags = { environment = "dev" }
 }
 
 #resource "azurerm_user_assigned_identity" "aksusermsi" {
@@ -32,13 +36,12 @@ resource "random_id" "log_analytics_workspace_name_suffix" {
 }
 
 # Azure Container Registry
-resource "azurerm_container_registry" "acr" {
-  name                = var.acr_name
+module "acr" {
+  source = "./modules/acr"
   resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = "Standard"
-  admin_enabled       = true
-  depends_on          = [azurerm_resource_group.rg]
+  location = var.location
+  acr_name = "plabacr"
+  
 }
 
 # Log Analytics

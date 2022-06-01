@@ -1,5 +1,5 @@
 resource "azurerm_network_security_group" "nsg" {
-  name                = "aks-nsg"
+  name                = var.nsg_name
   location            = var.location
   resource_group_name = var.resource_group_name
 }
@@ -7,15 +7,15 @@ resource "azurerm_network_security_group" "nsg" {
 
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
-  address_space       = ["10.0.0.0/16"]
+  address_space       = var.vnet_address_space
   location            = var.location
   resource_group_name = var.resource_group_name
 }
 resource "azurerm_subnet" "akssubnet" {
-  name                = var.subnet_name
+  name                 = var.subnetname
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
+  address_prefixes     = var.subnet_address_space
   #security_group = azurerm_network_security_group.nsg.id
 }
 

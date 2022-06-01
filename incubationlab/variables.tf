@@ -9,12 +9,13 @@ variable "tags" {
 
 variable "resource_group_name" {
   description = "The resource group name"
-  default     = "apprg"
+  default     = "plabrg"
 }
+
 
 variable "vnet_name" {
   description = "AKS VNET name"
-  default     = "aksvnet"
+  default     = "plabvnet"
 }
 
 variable "enable_auto_scaling" {

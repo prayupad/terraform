@@ -8,6 +8,11 @@ variable "location" {
   type        = string
 }
 
+variable "nsg_name" {
+  description = "nsg name"
+  type        = string
+}
+
 variable "vnet_name" {
   description = "VNET name"
   type        = string
@@ -16,7 +21,7 @@ variable "vnet_name" {
 variable "subnet_name" {
   description = "subnet name"
   type        = string
-  default = "aks-subnet"
+
 }
 variable "address_space" {
   description = "VNET address space"
