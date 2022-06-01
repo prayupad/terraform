@@ -3,6 +3,4 @@
     sensitive = true
 } */
 
-output "subnetout_id" {
-    value = azurerm_log_analytics_workspace.akslogworkspace.id
-}
+

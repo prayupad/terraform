@@ -4,12 +4,17 @@ variable "location" {
 }
 
 variable "tags" {
-  description = "tags assigned to services"
+  default = "dev"
 }
 
 variable "resource_group_name" {
   description = "The resource group name"
   default     = "plabrg"
+}
+
+variable "log_analytics_workspace" {
+  type = string
+  default = "plogworkspace"
 }
 
 
@@ -20,8 +25,9 @@ variable "resource_group_name" {
   default     = "epamaksusermsi"
 } */
 
+/*
 variable "keyvault_name" {
   description = "Name of the Key Vault to ceate key to encrypt/decrypt"
   type        = string
-}
+} */
 

@@ -42,5 +42,8 @@ variable "k8s_service_cidr" {
 
 variable "log_analytics_workspace" {
   type = string
+}
 
+variable "acr_id" {
+  type = string
 }

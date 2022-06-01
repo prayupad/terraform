@@ -22,7 +22,9 @@ provider "azurerm" {
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
-  tags = var.tags
+  tags = {
+    environment = "dev"
+  }
 }
 
 /*
@@ -35,7 +37,7 @@ resource "azurerm_user_assigned_identity" "aksusermsi" {
 
 
 #Create Vnet and subnet
-module "aksnetwork" {
+module "vnet" {
   source              = "./modules/vnet"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -58,27 +60,30 @@ module "aks" {
   source = "./modules/aks"
   resource_group_name = var.resource_group_name
   location = var.location
+  acr_id = module.acr.acr_id
   aks_cluster_name = "plabaks"
-  aks_subnet_id = module.aksnetwork.subnetout_id
+  aks_subnet_id = module.vnet.subnetout_id
   log_analytics_workspace = azurerm_log_analytics_workspace.akslogworkspace.id
 
 }
 
+/*
 #key vault
 module "KeyVault" {
   source = "./modules/KeyVault"
   resource_group_name = var.resource_group_name
   location = var.location
   keyvault_name = "pkeyvault"
-  
 }
+*/
+
 # Log Analytics
 resource "azurerm_log_analytics_workspace" "akslogworkspace" {
-  log_analytics_workspace_name = "plogworkspace"
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "Standalone"
   retention_in_days   = 30
+  name = var.log_analytics_workspace
 }
 
 
