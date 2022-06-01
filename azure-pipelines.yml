@@ -89,7 +89,7 @@ stages:
           inputs:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-            environmentServiceName: 'incubation-lab'
+            environmentServiceName: 'terraform'
             commandOptions: '-input=false'
             allowTelemetryCollection: true
             publishPlanResults: 'tfplan'
