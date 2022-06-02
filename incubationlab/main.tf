@@ -12,7 +12,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
     subscription_id      = "14c83b29-a1c0-4f29-b32c-9b94ba49886f"
     tenant_id            = "b41b72d0-4e9f-4c26-8a69-f949f367c91d"
 }
@@ -42,8 +46,8 @@ module "vnet" {
   resource_group_name = var.resource_group_name
   location            = var.location
   vnet_name           = "plabvnet"
-  nsg_name            = "pulabnsg"
-  #depends_on          = [azurerm_resource_group.rg]
+  nsg_name            = "plabnsg"
+  depends_on          = [azurerm_resource_group.rg]
 }
 
 # Azure Container Registry
@@ -84,6 +88,7 @@ resource "azurerm_log_analytics_workspace" "akslogworkspace" {
   sku                 = "Standalone"
   retention_in_days   = 30
   name = var.log_analytics_workspace
+  depends_on          = [azurerm_resource_group.rg]
 }
 
 
