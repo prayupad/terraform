@@ -35,7 +35,7 @@ stages :
           displayName: init
           inputs:
             command: 'init'
-            commandOptions: '-input=false'
+            commandOptions: '-reconfigure'
             backendType: 'azurerm'
             backendServiceArm: 'terraform'
             backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
