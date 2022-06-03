@@ -50,6 +50,7 @@ module "acr" {
   location = var.location
   acr_name = "labacrpu"
   tags = {
+    environment = "dev"
   }
 }
 
