@@ -10,13 +10,13 @@ terraform {
       version = "~>2.15.0"
     }
   }
-}
-/*
+
+
   backend "azurerm" {
 
   }
-*/
 
+}
 provider "azurerm" {
   features {
     resource_group {
