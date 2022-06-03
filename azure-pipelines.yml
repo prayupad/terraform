@@ -3,7 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-name: Terraform-CREATE
+name: Terraform-CREATE_$(BuildDefinitionName)
 
 variables:
   - name: tfresourceGroup
@@ -56,7 +56,7 @@ stages:
           command: 'validate'
           
 
-  - stage: TerraformPlan
+  - stage: Plan
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
@@ -94,8 +94,8 @@ stages:
             allowTelemetryCollection: true
             publishPlanResults: 'tfplan'
       
-  - stage: TerraformApply
-    dependsOn: [TerrafromPlan]
+  - stage: Apply
+    dependsOn: [plan]
     condition: succeeded('plan')
     jobs:
     - job: terraform_apply
