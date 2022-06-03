@@ -52,7 +52,7 @@ stages :
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
             allowTelemetryCollection: false
 
-  - stage: Terraform Destroy
+  - stage: Destroy
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
