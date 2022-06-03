@@ -56,7 +56,7 @@ stages:
           command: 'validate'
           
 
-  - stage: Terraform Plan
+  - stage: TerraformPlan
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
@@ -94,7 +94,7 @@ stages:
             allowTelemetryCollection: true
             publishPlanResults: 'tfplan'
       
-  - stage: Terraform Apply
+  - stage: TerraformApply
     dependsOn: [plan]
     condition: succeeded('plan')
     jobs:
