@@ -95,7 +95,7 @@ stages:
             publishPlanResults: 'tfplan'
       
   - stage: TerraformApply
-    dependsOn: [plan]
+    dependsOn: [TerrafromPlan]
     condition: succeeded('plan')
     jobs:
     - job: terraform_apply
