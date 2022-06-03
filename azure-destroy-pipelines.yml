@@ -11,7 +11,7 @@ variables:
   - name: tfresourceGroup
     value: 'terraformRG'
   - name: tfstorageAccount
-    value: 'putfstorage'
+    value: 'tfstoragepu'
   - name: tfcontainer
     value: 'tfstate'
   - name: tfkey
@@ -30,7 +30,7 @@ stages :
         - task: TerraformInstaller@0
           displayName: install
           inputs:
-            terraformVersion: 'v1.2.0'
+            terraformVersion: 'v1.2.2'
         - task: TerraformCLI@0
           displayName: init
           inputs:
@@ -62,7 +62,7 @@ stages :
       - task: TerraformInstaller@0
         displayName: 'install'
         inputs:
-          terraformVersion: 'v1.2.0'
+          terraformVersion: 'v1.2.2'
               
       - task: TerraformCLI@0
         displayName: 'init'
