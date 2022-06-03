@@ -14,11 +14,11 @@ resource "azurerm_key_vault" "vault" {
     object_id = data.azurerm_client_config.current.object_id
 
     key_permissions = [
-      "Get", "List", "Create", "Encrypt", "Decrypt"
+      "Get", "List", "Create"
     ]
 
     secret_permissions = [
-      "Get", "List", "Create", "backup", "delete", "list", "set"
+      "Get", "List", "Import"
     ]
 
     storage_permissions = [
