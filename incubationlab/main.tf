@@ -23,8 +23,6 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
-    /*subscription_id      = "14c83b29-a1c0-4f29-b32c-9b94ba49886f"
-    tenant_id            = "b41b72d0-4e9f-4c26-8a69-f949f367c91d" */
 }
 
 provider "azuread" {
@@ -51,7 +49,8 @@ module "acr" {
   resource_group_name = azurerm_resource_group.rg.name
   location = var.location
   acr_name = "labacrpu"
-  
+  tags = {
+  }
 }
 
 #kubernetes cluster
@@ -99,8 +98,8 @@ module "vnet" {
   source              = "./modules/vnet"
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
-  vnet_name           = "plabvnet"
-  nsg_name            = "plabnsg"
+  vnet_name           = "labvnetpu"
+  nsg_name            = "labnsgpu"
 }
 
 
