@@ -9,7 +9,7 @@ variables:
   - name: tfresourceGroup
     value: 'terraformRG'
   - name: tfstorageAccount
-    value: 'putfstorage'
+    value: 'tfstoragepu'
   - name: tfcontainer
     value: 'tfstate'
   - name: tfkey
@@ -44,7 +44,7 @@ stages:
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
           backendAzureRmResourceGroupLocation: 'eastus2'
           backendAzureRmStorageAccountName: '$(tfstorageAccount)'
-          backendAzureRmStorageAccountSku: 'Standard_LRS'
+          #backendAzureRmStorageAccountSku: 'Standard_LRS'
           backendAzureRmContainerName: '$(tfcontainer)'
           backendAzureRmKey: '$(tfkey)'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
@@ -56,7 +56,7 @@ stages:
           command: 'validate'
           
 
-  - stage: Terraform Plan
+  - stage: Plan
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
@@ -94,7 +94,7 @@ stages:
             allowTelemetryCollection: true
             publishPlanResults: 'tfplan'
       
-  - stage: Terraform Apply
+  - stage: Apply
     dependsOn: [plan]
     condition: succeeded('plan')
     jobs:
