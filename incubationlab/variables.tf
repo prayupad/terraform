@@ -9,21 +9,29 @@ variable "tags" {
 
 variable "resource_group_name" {
   description = "The resource group name"
-  default     = "plabrg"
+  default     = "labrgpu"
 }
 
 variable "log_analytics_workspace" {
   type = string
-  default = "plogworkspace"
+  default = "logworkspacepu"
+}
+
+/*
+variable "out_keyvault_id" {
+  type = string
 }
 
 
+variable "key" {
+  type = string
+}
 
-/*variable "aks_user_assigned_identity" {
-  description = "Name of the users and groups which need acces on KeyVault"
-  type        = string
-  default     = "epamaksusermsi"
-} */
+variable "secret" {
+  type = string
+}
+*/
+
 
 /*
 variable "keyvault_name" {

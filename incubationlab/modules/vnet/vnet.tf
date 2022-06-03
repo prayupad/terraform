@@ -19,4 +19,7 @@ resource "azurerm_subnet" "akssubnet" {
   #security_group = azurerm_network_security_group.nsg.id
 }
 
-
+resource "azurerm_subnet_network_security_group_association" "nsg_as" {
+  subnet_id                 = azurerm_subnet.akssubnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}

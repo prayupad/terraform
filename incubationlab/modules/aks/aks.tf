@@ -4,7 +4,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name     = var.resource_group_name
   dns_prefix              = var.aks_cluster_name
   role_based_access_control_enabled = true
-  #depends_on              = [azurerm_resource_group.rg]
 
 identity {
     type = "SystemAssigned"
@@ -36,7 +35,6 @@ identity {
 
 
 oms_agent {
-      #enabled = true
       log_analytics_workspace_id = var.log_analytics_workspace
 }
 }
