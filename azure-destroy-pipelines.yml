@@ -21,7 +21,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages :
-  - stage: validate
+  - stage: Validate
     jobs:
     - job: validate
       continueOnError: false
@@ -52,7 +52,7 @@ stages :
             workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
             allowTelemetryCollection: false
 
-  - stage: destroy
+  - stage: Terraform Destroy
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
