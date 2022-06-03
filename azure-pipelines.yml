@@ -44,7 +44,7 @@ stages:
           backendAzureRmResourceGroupName: '$(tfresourceGroup)'
           backendAzureRmResourceGroupLocation: 'eastus2'
           backendAzureRmStorageAccountName: '$(tfstorageAccount)'
-          #backendAzureRmStorageAccountSku: 'Standard_LRS'
+          backendAzureRmStorageAccountSku: 'Standard_LRS'
           backendAzureRmContainerName: '$(tfcontainer)'
           backendAzureRmKey: '$(tfkey)'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
