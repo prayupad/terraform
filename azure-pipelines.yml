@@ -9,7 +9,7 @@ variables:
   - name: tfresourceGroup
     value: 'terraformRG'
   - name: tfstorageAccount
-    value: 'putfstorage'
+    value: 'tfstoragepu'
   - name: tfcontainer
     value: 'tfstate'
   - name: tfkey
@@ -36,7 +36,7 @@ stages:
         displayName: 'init'
         inputs:
           command: 'init'
-          commandOptions: -reconfigure
+          #commandOptions: -reconfigure
           backendType: 'azurerm'
           backendServiceArm: 'terraform'
           backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
