@@ -3,7 +3,15 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-name: Terraform-CREATE_$(BuildDefinitionName)
+name: Terraform_$(BuildDefinitionName)
+
+parameters:
+  - name: actionToPerform
+    displayName: Deploy/Destroy
+    default:Deploy
+    values:
+      - Deploy
+      - Destroy
 
 variables:
   - name: tfresourceGroup
@@ -95,7 +103,7 @@ stages:
       
   - stage: Apply
     dependsOn: [plan]
-    condition: succeeded('plan')
+    condition: and(succeeded(plan),eq('${{ parameters.actionToPerform}}', 'Deploy')
     jobs:
     - job: terraform_apply
       steps:
