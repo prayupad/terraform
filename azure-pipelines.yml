@@ -8,7 +8,7 @@ name: Terraform_$(BuildDefinitionName)
 parameters:
   - name: actionToPerform
     displayName: Deploy/Destroy
-    default:Deploy
+    default: Deploy
     values:
       - Deploy
       - Destroy
@@ -24,7 +24,7 @@ variables:
     value: 'labphaseOne.tfstate'
 
 trigger:
-- none
+- main
 
 pool:
   vmImage: ubuntu-latest
