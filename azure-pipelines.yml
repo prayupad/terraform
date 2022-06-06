@@ -24,7 +24,7 @@ variables:
     value: 'labphaseOne.tfstate'
 
 trigger:
-- main
+- none
 
 pool:
   vmImage: ubuntu-latest
@@ -106,12 +106,16 @@ stages:
     condition: eq('${{ parameters.actionToPerform}}', 'Deploy')
     jobs:
     - job: terraform_apply
+      continueOnError: false
+      environment: terraform_dev
       steps:
       - task: TerraformInstaller@0
+        displayName: Install
         inputs:
           terraformVersion: 'v1.2.2'
       
       - task: TerraformCLI@0
+        displayName: Init
         inputs:
           command: 'init'
           commandOptions: -reconfigure
