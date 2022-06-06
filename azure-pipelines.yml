@@ -107,7 +107,7 @@ stages:
     jobs:
     - job: terraform_apply
       continueOnError: false
-      environment: terraform_dev
+      #environment: terraform_dev
       steps:
       - task: TerraformInstaller@0
         displayName: Install
