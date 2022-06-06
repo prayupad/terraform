@@ -64,7 +64,7 @@ stages:
           command: 'validate'
           
 
-  - stage: Plan
+  - stage: plan
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
@@ -101,7 +101,7 @@ stages:
             commandOptions: '-input=false'
             publishPlanResults: 'tfplan'
       
-  - stage: Apply
+  - stage: apply
     dependsOn: [plan]
     condition: and(succeeded(plan),eq('${{ parameters.actionToPerform}}', 'Deploy')
     jobs:
