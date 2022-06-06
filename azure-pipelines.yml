@@ -8,7 +8,7 @@ name: Terraform_$(BuildDefinitionName)
 parameters:
   - name: actionToPerform
     displayName: Deploy/Destroy
-    default: Deploy
+    default: Destroy
     values:
       - Deploy
       - Destroy
