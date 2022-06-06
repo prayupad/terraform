@@ -103,7 +103,7 @@ stages:
       
   - stage: apply
     dependsOn: [plan]
-    condition: (eq('${{ parameters.actionToPerform}}', 'Deploy')
+    condition: eq('${{ parameters.actionToPerform}}', 'Deploy')
     jobs:
     - job: terraform_apply
       steps:
@@ -148,7 +148,7 @@ stages:
 
   - stage: Destroy
     dependsOn: [validate]
-    condition: (eq('${{ parameters.actionToPerform}}', 'Destroy')
+    condition: eq('${{ parameters.actionToPerform}}', 'Destroy')
     jobs:
     - job: terraform_destroy
       steps:
