@@ -61,6 +61,7 @@ module "aks" {
   aks_cluster_name = "labakspu"
   aks_subnet_id = module.vnet.subnetout_id
   log_analytics_workspace = module.loganalytics.law_id
+  depends_on = [module.loganalytics]
 
 }
 
