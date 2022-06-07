@@ -25,17 +25,23 @@ variable "vnet_address_range" {
   default = [ "10.0.0.0/8" ]
 }
 
-variable "subnet_name" {
-  description = "subnet name"
+variable "aks_subnet" {
   type        = string
-  default = "pulabsubnet1"
+  default = "lab-aks-subnet"
 
 }
-variable "subnet_address_range" {
-  description = "VNET address space"
+variable "akssubnet_address_range" {
   type        = list(string)
-  default = [ "10.240.0.0/16" ]
+  default = [ "10.240.1.0/16" ]
 }
 
-
+variable "subnet_name" {
+  type        = string
+  default = "lab-subnet"
+}
   
+
+variable "subnet_address_range" {
+  type        = list(string)
+  default = [ "10.240.2.0/16" ]
+}
