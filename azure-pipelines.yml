@@ -24,7 +24,7 @@ variables:
     value: 'labphaseOne.tfstate'
 
 trigger:
-- none
+- main
 
 pool:
   vmImage: ubuntu-latest
@@ -58,6 +58,7 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
 
   - stage: plan
+    condition: eq('${{ parameters.actionToPerform}}', 'Deploy')
     jobs:
     - job: plan
       continueOnError: false
