@@ -17,6 +17,7 @@ terraform {
       source  = "hashicorp/helm"
       version = "~>2.5.1"
     }
+    
   }
 
 
@@ -33,9 +34,12 @@ provider "azurerm" {
   }
 }
 
-provider "azuread" {
-  tenant_id = "b41b72d0-4e9f-4c26-8a69-f949f367c91d"
-  
+provider "kubernetes" {
+    host = module.aks.host
+    client_certificate = base64decode(module.aks.client_certificate)
+    client_key = base64decode(module.aks.client_key)
+    cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+
 }
 
 
@@ -48,6 +52,10 @@ provider "helm" {
     cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
   }
 }
+
+#data "azurerm_client_config" "current" {
+#}
+
 
 #Create Resource Group
 resource "azurerm_resource_group" "rg" {
@@ -117,31 +125,32 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   vnet_name           = "labvnetpu"
-  nsg_name            = "labnsgpu"
+  #nsg_name            = "labnsgpu"
 }
 
 
 
-/*
-resource "azurerm_user_assigned_identity" "aksusermsi" {
-  name                = var.aks_user_assigned_identity
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  depends_on          = [azurerm_resource_group.rg]
-} */
 
 
 
 #Install Nginx ingress controller using helm charts
 
+data "azurerm_public_ip" "kubernetes" {
+  name = "lab-akspublicip"
+  resource_group_name = "MC_labrgpu_labakspu_eastus"
+  depends_on = [module.aks]
+}
 
 resource "helm_release" "nginx" {
-  depends_on = [module.aks]
-  name             = "nginx-ingress"
+  
+  name             = "ingress-nginx"
   namespace        = "ingress-basic"
   create_namespace = true
-  repository       = "https://kubernetes.github.io/ingress-nginx/"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
+  version          = "4.0.6"
+  depends_on = [module.aks]
+
 
   set {
   name  = "controller.replicaCount"
@@ -149,12 +158,12 @@ resource "helm_release" "nginx" {
   }
 
   set {
-  name  = "controller.nodeSelector\\.beta\\.kubernetes\\.io/os"
+  name  = "controller.nodeSelector.beta\\.kubernetes\\.io/os"
   value = "linux"
   }
 
   set {
-  name  = "defaultBackend.nodeSelector\\.beta\\.kubernetes\\.io/os"
+  name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
   value = "linux"
   }
 
@@ -165,9 +174,58 @@ resource "helm_release" "nginx" {
 
   set {
   name  = "controller.service.loadBalancerIP"
-  value = "module.aks.public_ip_address"
+  value = "52.249.198.175"
+  #value = "data.azurerm_public_ip.kubernetes.public_ip"
+  }
+
+}
+
+
+
+
+
+
+
+
+
+##################################
+
+## Creating Kubernetes service and ingress
+resource "kubernetes_service" "service" {
+  metadata {
+    name = "phaseoneapp-service"
+  }
+  spec {
+    port {
+      port        = 80
+      target_port = 80
+      #protocol    = "TCP"
+    }
+    type = "LoadBalancer"
   }
 }
 
-  
+resource "kubernetes_ingress" "ingress" {
+  wait_for_load_balancer = true
+  metadata {
+    name = "phaseoneapp-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+    }
+  }
+  spec {
+    rule {
+      http {
+        path {
+          path = "/*"
+          backend {
+            service_name = kubernetes_service.service.metadata.0.name
+            service_port = 80
+          }
+        }
+      }
+    }
+  }
+}
+
 

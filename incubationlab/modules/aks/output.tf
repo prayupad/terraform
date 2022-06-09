@@ -1,6 +1,8 @@
 output "public_ip_address" {
-    value = azurerm_public_ip.kubernetes.ip_address
+    value = "${azurerm_public_ip.kubernetes.*.ip_address}"
 }
+
+
 
 output "kube_config" {
   value = azurerm_kubernetes_cluster.aks.kube_config_raw

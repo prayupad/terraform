@@ -11,7 +11,9 @@ variable "location" {
 variable "nsg_name" {
   description = "nsg name"
   type        = string
+  default = "labnsgpu"
 }
+
 
 variable "vnet_name" {
   description = "VNET name"
@@ -35,15 +37,3 @@ variable "akssubnet_address_range" {
   default = [ "10.240.0.0/16" ]
 }
 
-/*
-variable "subnet_name" {
-  type        = string
-  default = "lab-subnet"
-}
-  
-
-variable "subnet_address_range" {
-  type        = list(string)
-  default = [ "10.241.0.0/16" ]
-}
-*/

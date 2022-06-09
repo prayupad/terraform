@@ -18,7 +18,7 @@ identity {
     #enable_auto_scaling     = true
     type                    = "VirtualMachineScaleSets"
     os_disk_size_gb         = 30
-    #max_pods                = 110
+    #max_pods                = 
     #max_count               = 
     #min_count               = 
   }
@@ -47,12 +47,14 @@ resource "azurerm_role_assignment" "role_acrpull" {
   #skip_service_principal_aad_check = true
 }
 
+/*
 resource "azurerm_role_assignment" "role_network" {
   scope                            = var.vnet_id
   role_definition_name             = "Network Contributor"
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  #skip_service_principal_aad_check = true
+  skip_service_principal_aad_check = true
 }
+*/
 
 resource "azurerm_public_ip" "kubernetes" {
   name = "lab-akspublicip"
@@ -60,4 +62,6 @@ resource "azurerm_public_ip" "kubernetes" {
   resource_group_name  = "${azurerm_kubernetes_cluster.aks.node_resource_group}"
   allocation_method = "Static"
   sku = "Standard"
+
 }
+

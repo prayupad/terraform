@@ -12,6 +12,11 @@ variable "resource_group_name" {
   default     = "labrgpu"
 }
 
+
+variable "aks_cluster_name" {
+  default     = "labakspu"
+}
+
 variable "log_analytics_workspace" {
   type = string
   default = "logworkspacepu"
