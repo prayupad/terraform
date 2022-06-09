@@ -100,24 +100,7 @@ module "loganalytics" {
   
 }
 
-#key vault
-module "KeyVault" {
-  source = "./modules/KeyVault"
-  resource_group_name = azurerm_resource_group.rg.name
-  location = var.location
-  keyvault_name = "keyvaultpu"
 
-
-}
-
-/*
-resource "azurerm_key_vault_key" "key" {
-  name         = var.key
-  value        = var.secret
-  key_vault_id = var.out_keyvault_id
-  depends_on = [module.KeyVault]
-}
-*/
 
 #Create Vnet and subnet
 module "vnet" {
@@ -125,7 +108,7 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   vnet_name           = "labvnetpu"
-  #nsg_name            = "labnsgpu"
+  nsg_name            = "labnsgpu"
 }
 
 
@@ -174,8 +157,8 @@ resource "helm_release" "nginx" {
 
   set {
   name  = "controller.service.loadBalancerIP"
-  value = "52.249.198.175"
-  #value = "data.azurerm_public_ip.kubernetes.public_ip"
+  #value = "52.249.198.175"
+  value = "module.aks.public_ip_address"
   }
 
 }
@@ -189,7 +172,7 @@ resource "helm_release" "nginx" {
 
 
 ##################################
-
+/*
 ## Creating Kubernetes service and ingress
 resource "kubernetes_service" "service" {
   metadata {
@@ -227,5 +210,5 @@ resource "kubernetes_ingress" "ingress" {
     }
   }
 }
-
+*/
 

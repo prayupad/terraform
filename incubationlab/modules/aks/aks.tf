@@ -7,12 +7,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 identity {
     type = "SystemAssigned"
-    #user_assigned_identity_id = azurerm_user_assigned_identity.aksusermsi.id
+
 }
 
   default_node_pool {
     name                    = "nodepool01"
-    node_count              = 1
+    node_count              = var.nodepool_node_count
     vm_size                 = var.nodepool_vm_size
     vnet_subnet_id          = var.aks_subnet_id
     #enable_auto_scaling     = true
@@ -44,17 +44,10 @@ resource "azurerm_role_assignment" "role_acrpull" {
   scope                            = var.acr_id
   role_definition_name             = "AcrPull"
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  #skip_service_principal_aad_check = true
-}
-
-/*
-resource "azurerm_role_assignment" "role_network" {
-  scope                            = var.vnet_id
-  role_definition_name             = "Network Contributor"
-  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }
-*/
+
+
 
 resource "azurerm_public_ip" "kubernetes" {
   name = "lab-akspublicip"
@@ -65,3 +58,11 @@ resource "azurerm_public_ip" "kubernetes" {
 
 }
 
+/*
+resource "azurerm_role_assignment" "role_network" {
+  scope                            = var.vnet_id
+  role_definition_name             = "Network Contributor"
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  skip_service_principal_aad_check = true
+}
+*/

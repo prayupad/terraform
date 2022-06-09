@@ -22,25 +22,5 @@ variable "log_analytics_workspace" {
   default = "logworkspacepu"
 }
 
-/*
-variable "out_keyvault_id" {
-  type = string
-}
 
-
-variable "key" {
-  type = string
-}
-
-variable "secret" {
-  type = string
-}
-*/
-
-
-/*
-variable "keyvault_name" {
-  description = "Name of the Key Vault to ceate key to encrypt/decrypt"
-  type        = string
-} */
 

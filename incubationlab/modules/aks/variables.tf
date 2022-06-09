@@ -11,9 +11,9 @@ variable "aks_cluster_name" {
 }
 
 
-variable "nodepool_nodes_count" {
+variable "nodepool_node_count" {
   description = "Default nodepool nodes count"
-  default     = 2
+  default     = 1
 }
 
 variable "nodepool_vm_size" {
