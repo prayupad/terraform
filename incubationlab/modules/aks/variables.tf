@@ -47,3 +47,4 @@ variable "log_analytics_workspace" {
 variable "acr_id" {
   type = string
 }
+

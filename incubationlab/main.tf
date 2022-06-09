@@ -10,9 +10,7 @@ terraform {
       version = "~>2.15.0"
     }
   }
-    helm = {
-      source = "hashicorp/helm"
-    }
+
 
   backend "azurerm" {
 
