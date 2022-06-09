@@ -102,7 +102,7 @@ stages:
                     command: 'plan'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
                     environmentServiceName: 'terraform'
-                    commandOptions: '-input=false'
+                    commandOptions: '-lock=false'
                     allowTelemetryCollection: true
                     publishPlanResults: 'tfplan'
         
@@ -112,7 +112,7 @@ stages:
                     command: 'apply'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
                     environmentServiceName: 'terraform'
-                    commandOptions: '-input=false -auto-approve' 
+                    commandOptions: '-lock=false -auto-approve' 
                     allowTelemetryCollection: true
   - stage: Destroy
     dependsOn: [validate]
