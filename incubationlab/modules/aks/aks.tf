@@ -12,7 +12,7 @@ identity {
 
   default_node_pool {
     name                    = "nodepool01"
-    node_count              = 2
+    node_count              = 1
     vm_size                 = var.nodepool_vm_size
     vnet_subnet_id          = var.aks_subnet_id
     #enable_auto_scaling     = true
@@ -47,3 +47,10 @@ resource "azurerm_role_assignment" "role_acrpull" {
   #skip_service_principal_aad_check = true
 }
 
+resource "azurerm_public_ip" "kubernetes" {
+  name = "lab-akspublicip"
+  location = var.location
+  resource_group_name  = "${azurerm_kubernetes_cluster.aks.node_resource_group}"
+  allocation_method = "Static"
+  sku = "Standard"
+}

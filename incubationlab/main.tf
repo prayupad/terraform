@@ -10,7 +10,9 @@ terraform {
       version = "~>2.15.0"
     }
   }
-
+    helm = {
+      source = "hashicorp/helm"
+    }
 
   backend "azurerm" {
 
@@ -30,7 +32,10 @@ provider "azuread" {
   
 }
 
+provider "helm" {
 
+  
+}
 
 #Create Resource Group
 resource "azurerm_resource_group" "rg" {
@@ -114,7 +119,40 @@ resource "azurerm_user_assigned_identity" "aksusermsi" {
 
 
 
+#Install Nginx ingress controller using helm charts
+resource "helm_release" "ingress-nginx" {
+  depends_on = [module.aks]
+  name             = "ingress-nginx"
+  namespace        = "ingress-basic"
+  create_namespace = true
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
 
+  set {
+  name  = "controller.replicaCount"
+  value = "2"
+  }
+
+  set {
+  name  = "controller.nodeSelector\\.beta\\.kubernetes\\.io/os"
+  value = "linux"
+  }
+
+  set {
+  name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
+  value = "linux"
+  }
+
+  set {
+  name  = "controller.service.externalTrafficPolicy"
+  value = "Local"
+  }
+
+  set {
+  name  = "controller.service.loadBalancerIP"
+  value = "module.aks.public_ip_address"
+  }
+}
 
   
 
