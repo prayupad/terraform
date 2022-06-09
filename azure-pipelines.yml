@@ -2,9 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
 name: Terraform_$(BuildDefinitionName)
-
 parameters:
   - name: actionToPerform
     displayName: Deploy/Destroy
@@ -12,7 +10,6 @@ parameters:
     values:
       - Deploy
       - Destroy
-
 variables:
   - name: tfresourceGroup
     value: 'terraformRG'
@@ -22,13 +19,10 @@ variables:
     value: 'tfstate'
   - name: tfkey
     value: 'labphaseOne.tfstate'
-
 trigger:
 - main
-
 pool:
   vmImage: ubuntu-latest
-
 stages:
   - stage: validate
     jobs:
@@ -39,35 +33,6 @@ stages:
         displayName: 'install'
         inputs:
           terraformVersion: 'v1.2.2'
-
-      - task: TerraformCLI@0
-        displayName: Init 
-        inputs:
-          command: 'init'
-          #commandOptions: -reconfigure
-          backendType: 'azurerm'
-          backendServiceArm: 'terraform'
-          backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
-          ensureBackend: true
-          backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmResourceGroupLocation: 'eastus2'
-          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
-          backendAzureRmStorageAccountSku: 'Standard_LRS'
-          backendAzureRmContainerName: '$(tfcontainer)'
-          backendAzureRmKey: '$(tfkey)'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-
-  - stage: plan
-    condition: eq('${{ parameters.actionToPerform}}', 'Deploy')
-    jobs:
-    - job: plan
-      continueOnError: false
-      steps:
-      - task: TerraformInstaller@0
-        displayName: 'install'
-        inputs:
-          terraformVersion: 'v1.2.2'
-
       - task: TerraformCLI@0
         displayName: Init 
         inputs:
@@ -84,72 +49,69 @@ stages:
           backendAzureRmContainerName: '$(tfcontainer)'
           backendAzureRmKey: '$(tfkey)'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-        
       - task: TerraformCLI@0
         displayName: validate
         inputs:
           provider: azurerm
           command: 'validate'
-                
-      - task: TerraformCLI@0
-        displayName: plan
-        inputs:
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'terraform'
-          commandOptions: '-lock=false'
-          publishPlanResults: 'tfplan'
-
-      
-  - stage: apply
-    dependsOn: [plan]
+          
+  - stage: deploy
     condition: eq('${{ parameters.actionToPerform}}', 'Deploy')
+    dependsOn: [validate]
     jobs:
-    - job: terraform_apply
-      continueOnError: false
-      #environment: terraform_dev
-      steps:
-      - task: TerraformInstaller@0
-        displayName: Install
-        inputs:
-          terraformVersion: 'v1.2.2'
-      
-      - task: TerraformCLI@0
-        displayName: Init
-        inputs:
-          command: 'init'
-          commandOptions: -reconfigure
-          backendType: 'azurerm'
-          backendServiceArm: 'terraform'
-          backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
-          ensureBackend: true
-          backendAzureRmResourceGroupName: '$(tfresourceGroup)'
-          backendAzureRmResourceGroupLocation: 'eastus2'
-          backendAzureRmStorageAccountName: '$(tfstorageAccount)'
-          backendAzureRmStorageAccountSku: 'Standard_LRS'
-          backendAzureRmContainerName: '$(tfcontainer)'
-          backendAzureRmKey: '$(tfkey)'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-
-      - task: TerraformCLI@0
-        displayName: 'terraform plan'
-        inputs:
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'terraform'
-          commandOptions: '-input=false'
-          allowTelemetryCollection: true
-          publishPlanResults: 'tfplan'
+      - deployment: deploy_terraform
+        continueOnError: false
+        environment: terraform_dev
+        timeoutInMinutes: 15
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: TerraformInstaller@0
+                  displayName: 'install'
+                  inputs:
+                    terraformVersion: 'v1.2.2'
+                - task: TerraformCLI@0
+                  displayName: Init 
+                  inputs:
+                    command: 'init'
+                    commandOptions: -reconfigure
+                    backendType: 'azurerm'
+                    backendServiceArm: 'terraform'
+                    backendAzureRmSubscriptionId: '14c83b29-a1c0-4f29-b32c-9b94ba49886f'
+                    ensureBackend: true
+                    backendAzureRmResourceGroupName: '$(tfresourceGroup)'
+                    backendAzureRmResourceGroupLocation: 'eastus2'
+                    backendAzureRmStorageAccountName: '$(tfstorageAccount)'
+                    backendAzureRmStorageAccountSku: 'Standard_LRS'
+                    backendAzureRmContainerName: '$(tfcontainer)'
+                    backendAzureRmKey: '$(tfkey)'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+                - task: TerraformCLI@0
+                  displayName: validate
+                  inputs:
+                    provider: azurerm
+                    command: 'validate'
+                
+                - task: TerraformCLI@0
+                  displayName: 'terraform plan'
+                  inputs:
+                    command: 'plan'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+                    environmentServiceName: 'terraform'
+                    commandOptions: '-lock=false'
+                    allowTelemetryCollection: true
+                    publishPlanResults: 'tfplan'
         
-      - task: TerraformCLI@0
-        displayName: 'terraform apply'
-        inputs:
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
-          environmentServiceName: 'terraform'
-          commandOptions: '-input=false -auto-approve' 
-          allowTelemetryCollection: true
-
+                - task: TerraformCLI@0
+                  displayName: 'terraform apply'
+                  inputs:
+                    command: 'apply'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
+                    environmentServiceName: 'terraform'
+                    commandOptions: '-lock=false -auto-approve' 
+                    allowTelemetryCollection: true
   - stage: Destroy
     dependsOn: [validate]
     condition: eq('${{ parameters.actionToPerform}}', 'Destroy')
@@ -183,4 +145,4 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
           environmentServiceName: 'terraform'
           commandOptions: '-input=false'
-          allowTelemetryCollection: false        
+          allowTelemetryCollection: false 
