@@ -10,6 +10,7 @@ parameters:
     values:
       - Deploy
       - Destroy
+
 variables:
   - name: tfresourceGroup
     value: 'terraformRG'
@@ -19,8 +20,9 @@ variables:
     value: 'tfstate'
   - name: tfkey
     value: 'labphaseOne.tfstate'
+
 trigger:
-- main
+- none
 pool:
   vmImage: ubuntu-latest
 stages:
@@ -100,7 +102,7 @@ stages:
                     command: 'plan'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
                     environmentServiceName: 'terraform'
-                    commandOptions: '-lock=false'
+                    commandOptions: '-input=false'
                     allowTelemetryCollection: true
                     publishPlanResults: 'tfplan'
         
@@ -110,7 +112,7 @@ stages:
                     command: 'apply'
                     workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
                     environmentServiceName: 'terraform'
-                    commandOptions: '-lock=false -auto-approve' 
+                    commandOptions: '-input=false -auto-approve' 
                     allowTelemetryCollection: true
   - stage: Destroy
     dependsOn: [validate]
