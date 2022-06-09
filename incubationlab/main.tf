@@ -9,6 +9,14 @@ terraform {
       source = "hashicorp/azuread"
       version = "~>2.15.0"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~>2.11.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~>2.5.1"
+    }
   }
 
 
@@ -30,10 +38,12 @@ provider "azuread" {
   
 }
 
+
+
 provider "helm" {
   kubernetes {
     host = module.aks.host
-    client_certificate = base64decode(module.aks.host)
+    client_certificate = base64decode(module.aks.client_certificate)
     client_key = base64decode(module.aks.client_key)
     cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
   }
@@ -65,6 +75,7 @@ module "aks" {
   resource_group_name = azurerm_resource_group.rg.name
   location = var.location
   acr_id = module.acr.acr_id
+  vnet_id = module.vnet.vnet_id
   aks_cluster_name = "labakspu"
   aks_subnet_id = module.vnet.subnetout_id
   log_analytics_workspace = module.loganalytics.law_id
@@ -122,12 +133,14 @@ resource "azurerm_user_assigned_identity" "aksusermsi" {
 
 
 #Install Nginx ingress controller using helm charts
-resource "helm_release" "ingress-nginx" {
+
+
+resource "helm_release" "nginx" {
   depends_on = [module.aks]
-  name             = "ingress-nginx"
+  name             = "nginx-ingress"
   namespace        = "ingress-basic"
   create_namespace = true
-  repository       = "https://kubernetes.github.io/ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx/"
   chart            = "ingress-nginx"
 
   set {
@@ -141,7 +154,7 @@ resource "helm_release" "ingress-nginx" {
   }
 
   set {
-  name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
+  name  = "defaultBackend.nodeSelector\\.beta\\.kubernetes\\.io/os"
   value = "linux"
   }
 

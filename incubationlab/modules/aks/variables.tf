@@ -48,3 +48,6 @@ variable "acr_id" {
   type = string
 }
 
+variable "vnet_id" {
+  type = string
+}

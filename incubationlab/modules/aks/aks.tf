@@ -47,6 +47,13 @@ resource "azurerm_role_assignment" "role_acrpull" {
   #skip_service_principal_aad_check = true
 }
 
+resource "azurerm_role_assignment" "role_network" {
+  scope                            = var.vnet_id
+  role_definition_name             = "Network Contributor"
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  #skip_service_principal_aad_check = true
+}
+
 resource "azurerm_public_ip" "kubernetes" {
   name = "lab-akspublicip"
   location = var.location
