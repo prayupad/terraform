@@ -97,7 +97,7 @@ stages:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/incubationlab'
           environmentServiceName: 'terraform'
-          commandOptions: '-input=false'
+          commandOptions: '-lock=false'
           publishPlanResults: 'tfplan'
 
       
