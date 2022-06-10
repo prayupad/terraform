@@ -37,6 +37,11 @@ identity {
 oms_agent {
       log_analytics_workspace_id = var.log_analytics_workspace
 }
+
+ingress_application_gateway {
+  gateway_name               = var.appgw_subnet_name
+  subnet_cidr                = var.appgw_subnet_address_prefix
+}
 }
 
 #ACR Role assignment
@@ -65,7 +70,7 @@ resource "azurerm_role_assignment" "role_network" {
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }
-*/
+
 
 
 
@@ -110,3 +115,5 @@ resource "helm_release" "nginx" {
   }
 
 }
+
+*/
