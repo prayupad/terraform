@@ -52,7 +52,7 @@ resource "azurerm_role_assignment" "role_acrpull" {
   skip_service_principal_aad_check = true
 }
 
-
+/*
 
 resource "azurerm_public_ip" "kubernetes" {
   name = "lab-akspublicip"
@@ -115,5 +115,5 @@ resource "helm_release" "nginx" {
   }
 
 }
-
 */
+
