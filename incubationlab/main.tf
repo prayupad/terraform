@@ -33,9 +33,6 @@ provider "azurerm" {
 }
 
 
-provider "kubernetes" {
-}
-
 
 
 provider "helm" {
