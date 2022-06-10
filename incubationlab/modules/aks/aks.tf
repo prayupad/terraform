@@ -105,8 +105,8 @@ resource "helm_release" "nginx" {
 
   set {
   name  = "controller.service.loadBalancerIP"
-  #value = "20.127.88.176"
-  value = "azurerm_public_ip.kubernetes.ip_address"
+  value = "20.121.29.161"
+  #value = "azurerm_public_ip.kubernetes.ip_address"
   }
 
 }
