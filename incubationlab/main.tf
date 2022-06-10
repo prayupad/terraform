@@ -5,12 +5,8 @@ terraform {
       version = "~>3.8.0"
       source = "hashicorp/azurerm"
     }
-    /*
-    azuread = {
-      source = "hashicorp/azuread"
-      version = "~>2.15.0"
-    }
-    */
+
+
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~>2.11.0"
@@ -36,12 +32,8 @@ provider "azurerm" {
   }
 }
 
-provider "kubernetes" {
-    host = module.aks.host
-    client_certificate = base64decode(module.aks.client_certificate)
-    client_key = base64decode(module.aks.client_key)
-    cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
 
+provider "kubernetes" {
 }
 
 
@@ -55,8 +47,6 @@ provider "helm" {
   }
 }
 
-#data "azurerm_client_config" "current" {
-#}
 
 
 #Create Resource Group
@@ -118,99 +108,7 @@ module "vnet" {
 
 
 
-#Install Nginx ingress controller using helm charts
-
-data "azurerm_public_ip" "kubernetes" {
-  name = "lab-akspublicip"
-  resource_group_name = "MC_labrgpu_labakspu_eastus"
-  depends_on = [module.aks]
-}
-
-resource "helm_release" "nginx" {
-  
-  name             = "ingress-nginx"
-  namespace        = "ingress-basic"
-  create_namespace = true
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  chart            = "ingress-nginx"
-  version          = "4.0.6"
-  depends_on = [module.aks]
-
-
-  set {
-  name  = "controller.replicaCount"
-  value = "2"
-  }
-
-  set {
-  name  = "controller.nodeSelector.beta\\.kubernetes\\.io/os"
-  value = "linux"
-  }
-
-  set {
-  name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
-  value = "linux"
-  }
-
-  set {
-  name  = "controller.service.externalTrafficPolicy"
-  value = "Local"
-  }
-
-  set {
-  name  = "controller.service.loadBalancerIP"
-  value = "20.232.21.105"
-  #value = "module.aks.public_ip_address"
-  }
-
-}
 
 
 
-
-
-
-
-
-
-##################################
-/*
-## Creating Kubernetes service and ingress
-resource "kubernetes_service" "service" {
-  metadata {
-    name = "phaseoneapp-service"
-  }
-  spec {
-    port {
-      port        = 80
-      target_port = 80
-      #protocol    = "TCP"
-    }
-    type = "LoadBalancer"
-  }
-}
-
-resource "kubernetes_ingress" "ingress" {
-  wait_for_load_balancer = true
-  metadata {
-    name = "phaseoneapp-ingress"
-    annotations = {
-      "kubernetes.io/ingress.class" = "nginx"
-    }
-  }
-  spec {
-    rule {
-      http {
-        path {
-          path = "/*"
-          backend {
-            service_name = kubernetes_service.service.metadata.0.name
-            service_port = 80
-          }
-        }
-      }
-    }
-  }
-}
-*/
 

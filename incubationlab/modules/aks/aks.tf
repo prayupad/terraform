@@ -1,3 +1,5 @@
+
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                    = var.aks_cluster_name
   location                = var.location
@@ -38,10 +40,6 @@ oms_agent {
       log_analytics_workspace_id = var.log_analytics_workspace
 }
 
-ingress_application_gateway {
-  gateway_name               = var.appgw_subnet_name
-  subnet_cidr                = var.appgw_subnet_address_prefix
-}
 }
 
 #ACR Role assignment
@@ -52,7 +50,6 @@ resource "azurerm_role_assignment" "role_acrpull" {
   skip_service_principal_aad_check = true
 }
 
-/*
 
 resource "azurerm_public_ip" "kubernetes" {
   name = "lab-akspublicip"
@@ -62,6 +59,13 @@ resource "azurerm_public_ip" "kubernetes" {
   sku = "Standard"
 
 }
+
+/*
+data "azurerm_public_ip" "example" {
+  name                = "lab-akspublicip"
+  resource_group_name = "azurerm_kubernetes_cluster.aks.node_resource_group"
+}
+*/
 
 
 resource "azurerm_role_assignment" "role_network" {
@@ -107,13 +111,59 @@ resource "helm_release" "nginx" {
   name  = "controller.service.externalTrafficPolicy"
   value = "Local"
   }
-
+/*
   set {
   name  = "controller.service.loadBalancerIP"
-  value = "20.121.29.161"
-  #value = "azurerm_public_ip.kubernetes.ip_address"
+  #value = "20.121.29.161"
+  value = "data.azurerm_public_ip.kubernetes.ip_address"
   }
+*/
+}
 
+
+
+
+
+
+
+
+##################################
+/*
+## Creating Kubernetes service and ingress
+resource "kubernetes_service" "service" {
+  metadata {
+    name = "phaseoneapp-service"
+  }
+  spec {
+    port {
+      port        = 80
+      target_port = 80
+      #protocol    = "TCP"
+    }
+    type = "LoadBalancer"
+  }
+}
+
+resource "kubernetes_ingress" "ingress" {
+  wait_for_load_balancer = true
+  metadata {
+    name = "phaseoneapp-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+    }
+  }
+  spec {
+    rule {
+      http {
+        path {
+          path = "/*"
+          backend {
+            service_name = kubernetes_service.service.metadata.0.name
+            service_port = 80
+          }
+        }
+      }
+    }
+  }
 }
 */
-

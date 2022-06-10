@@ -52,14 +52,3 @@ variable "vnet_id" {
   type = string
 }
 
-variable "appgw_subnet_name" {
-  description = "Specifies the name of the APPGW subnet"
-  default     = "AppGWSubnet"
-  type        = string
-}
-
-variable "appgw_subnet_address_prefix" {
-  description = "Specifies the address prefix of the APPGW subnet"
-  default     = "10.0.4.0/24"
-  type        = string
-}  
