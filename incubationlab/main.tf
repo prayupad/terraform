@@ -159,7 +159,7 @@ resource "helm_release" "nginx" {
 
   set {
   name  = "controller.service.loadBalancerIP"
-  value = "20.127.88.176"
+  value = "20.232.21.105"
   #value = "module.aks.public_ip_address"
   }
 
