@@ -63,7 +63,7 @@ resource "azurerm_public_ip" "kubernetes" {
 
 }
 
-/*
+
 resource "azurerm_role_assignment" "role_network" {
   scope                            = var.vnet_id
   role_definition_name             = "Network Contributor"
