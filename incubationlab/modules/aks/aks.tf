@@ -66,3 +66,47 @@ resource "azurerm_role_assignment" "role_network" {
   skip_service_principal_aad_check = true
 }
 */
+
+
+
+#Install Nginx ingress controller using helm charts
+
+
+resource "helm_release" "nginx" {
+  
+  name             = "ingress-nginx"
+  namespace        = "ingress-basic"
+  create_namespace = true
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  version          = "4.0.6"
+  depends_on = [azurerm_kubernetes_cluster.aks , azurerm_public_ip.kubernetes]
+
+
+  set {
+  name  = "controller.replicaCount"
+  value = "2"
+  }
+
+  set {
+  name  = "controller.nodeSelector.beta\\.kubernetes\\.io/os"
+  value = "linux"
+  }
+
+  set {
+  name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
+  value = "linux"
+  }
+
+  set {
+  name  = "controller.service.externalTrafficPolicy"
+  value = "Local"
+  }
+
+  set {
+  name  = "controller.service.loadBalancerIP"
+  #value = "20.127.88.176"
+  value = "azurerm_public_ip.kubernetes.ip_address"
+  }
+
+}
