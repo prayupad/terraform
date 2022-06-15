@@ -1,5 +1,4 @@
 
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                    = var.aks_cluster_name
   location                = var.location
@@ -60,21 +59,15 @@ resource "azurerm_public_ip" "kubernetes" {
 
 }
 
+
 /*
-data "azurerm_public_ip" "example" {
-  name                = "lab-akspublicip"
-  resource_group_name = "azurerm_kubernetes_cluster.aks.node_resource_group"
-}
-*/
-
-
 resource "azurerm_role_assignment" "role_network" {
   scope                            = var.vnet_id
   role_definition_name             = "Network Contributor"
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }
-
+*/
 
 
 
@@ -111,6 +104,9 @@ resource "helm_release" "nginx" {
   name  = "controller.service.externalTrafficPolicy"
   value = "Local"
   }
+
+
+
 /*
   set {
   name  = "controller.service.loadBalancerIP"
